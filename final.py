@@ -2,13 +2,15 @@
 import tkinter as tk
 import math 
 import random 
+import getpass
+import time 
 
 
 
 
 window = tk.Tk()
-window.title('')
-window.geometry('400x200')
+window.title('final project')
+window.geometry('600x200')
 '''
 I would like to create a two players game that allows two variables to be input. 
 Negotiate and Report. 
@@ -41,22 +43,29 @@ Maybe displaying a winner screen (if time) ?
 Maybe displaying a tie screen (if time) ? 
 '''
 
-
+#how to hide the character of a password
+'''
+password = getpass.getpass()
+print(password)
+mypass = getpass.getpass("PASSWORD : ")
+'''
 
 lives1 = 3
 lives2 = 3
-
+p1 = None
+p2 = None
 ready_ = False 
 
 
 
-def ready(): 
+def ready(e): 
     global ready_
     ready_ = True 
+    game1(e)
+
 
 def names():
-    global player1
-    global player2
+    global player1, player2
     namelabel1 = tk.Label(window,text="What is the name of player 1 ?", bg="#FFFFFF")
     namelabel1.grid(row=0,column=0)
     namelabel2 = tk.Label(window,text="What is the name of player 2 ?", bg="#FFFFFF")
@@ -72,6 +81,7 @@ def names():
     
     
 def play(e):
+    global p1, p2
     p1 = player1.get()
     p2 = player2.get()
     if player1.get() != "" and player2.get() != "": 
@@ -87,6 +97,59 @@ def play(e):
     else: 
         names()
 
+def decision(e): 
+    label1 = tk.Label(window,text="make a decision, you have 5 seconds", bg="#FFFFFF")
+    label1.grid(row=0,column=0)
+    if e.keysym == "Left":
+        myList.append(0)
+
+    if e.keysym == "Right":
+        myList.append(1)
+
+    return myList
+
+def game1(e): 
+    global lives1, lives2, myList
+    myList = []
+    playtime = 3
+    while ready_== True and playtime !=0: 
+        for widget in window.winfo_children():
+            widget.destroy()
+        playtime -=1
+        label3 = tk.Label(window,text=f"{p1} press the arrow key corresponding to your decision \n(either left for negociate of right for betray) ", bg="#FFFFFF")
+        label3.grid(row=0,column=0)
+        decision(e)
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        
+        label4 = tk.Label(window,text=f"{p2} press the arrow key corresponding to your decision \n(either left for negociate of right for betray) ", bg="#FFFFFF")
+        label4.grid(row=0,column=0)
+        decision(e)
+        print("worked")
+        time.sleep(2)
+       
+
+        for widget in window.winfo_children():
+            widget.destroy()
+
+
+        if myList[0] == 0 and myList[1] == 0:
+            lives1 += 1
+            lives2 += 1
+        if myList[0] == 0 and myList[1] == 1: 
+            lives1 -= 1
+        if myList[0] == 1 and myList[1] == 0: 
+            lives2 -= 1
+        if myList[0] == 1 and myList[1] == 1:  
+            lives1 -= 1
+            lives2 -= 1
+
+
+
+
 names()
+
+
 
 window.mainloop()
