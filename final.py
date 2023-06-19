@@ -116,7 +116,7 @@ def decision(e):
 
 def updateWindow():
     global lives1, lives2
-    if x != None and y != None: 
+    if x != None and y != None and gameState == 2 or gameState ==4 or gameState == 6: 
         if x == 0 and  y == 0:
             lives1 += 1
             lives2 += 1
@@ -137,7 +137,7 @@ def updateWindow():
         window.bind("<KeyPress>",gameKey2)
 
     if gameState == 6: 
-        print( x, y)
+        print(lives1, lives2)
         if lives1 == 0 or lives2 == 0: 
             gamestop()
         else: 
