@@ -10,7 +10,7 @@ import time
 
 window = tk.Tk()
 window.title('final project')
-window.geometry('600x200')
+window.geometry('920x200')
 '''
 I would like to create a two players game that allows two variables to be input. 
 Negotiate and Report. 
@@ -144,8 +144,12 @@ def updateWindow():
             gameon()
        
 def gamestop(): 
-    print("bruh")
-
+    if lives1 == 0:
+        label3 = tk.Label(window,text=f"{p1} lost all their lives and lost !!! ", bg="#FFFFFF")
+        label3.grid(row=0,column=0)
+    if lives2 == 0:
+        label3 = tk.Label(window,text=f"{p2} lost all their lives and lost !!! ", bg="#FFFFFF")
+        label3.grid(row=0,column=0)
 def gameon():
     print("yipee")
 
