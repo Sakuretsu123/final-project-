@@ -55,7 +55,12 @@ lives2 = 3
 p1 = None
 p2 = None
 ready_ = False 
-
+gameState = 0
+x, y = None, None
+"""
+0 - getting names
+1 - first decision
+"""
 
 
 def ready(e): 
@@ -98,42 +103,115 @@ def play(e):
         names()
 
 def decision(e): 
-    label1 = tk.Label(window,text="make a decision, you have 5 seconds", bg="#FFFFFF")
-    label1.grid(row=0,column=0)
-    if e.keysym == "Left":
-        myList.append(0)
+    x=0
+    while x == 0:
+        label1 = tk.Label(window,text="make a decision", bg="#FFFFFF")
+        label1.grid(row=0,column=0)
+        if e.keysym == "Left":
+            x = 1
+            return 0
+        if e.keysym == "Right":
+            x = 1
+            return 1
 
-    if e.keysym == "Right":
-        myList.append(1)
+def updateWindow():
+    global lives1, lives2
+    if x != None and y != None: 
+        if x == 0 and  y == 0:
+            lives1 += 1
+            lives2 += 1
+        if x == 0 and y == 1: 
+            lives1 -= 1
+        if x == 1 and y == 0: 
+            lives2 -= 1
+        if x == 1 and y == 1:  
+            lives1 -= 1
+            lives2 -= 1
+    if gameState == 0 or gameState ==2 or gameState ==4:
+        label3 = tk.Label(window,text=f"{p1} press the arrow key corresponding to your decision \n(either left for negociate of right for betray) ", bg="#FFFFFF")
+        label3.grid(row=0,column=0)
+        window.bind("<KeyPress>",gameKey1)
+    if gameState == 1 or  gameState ==3 or gameState ==5:
+        label3 = tk.Label(window,text=f"{p2} press the arrow key corresponding to your decision \n(either left for negociate of right for betray)")
+        label3.grid(row=0,column=0)
+        window.bind("<KeyPress>",gameKey2)
 
-    return myList
+    if gameState == 6: 
+        print( x, y)
+        if lives1 == 0 or lives2 == 0: 
+            gamestop()
+        else: 
+            gameon()
+       
+def gamestop(): 
+    print("bruh")
+
+def gameon():
+    print("yipee")
+
+
+def gameKey1(e):
+    print(e)
+    global gameState, x
+    x = 0
+    if e.keysym=="Left":
+        gameState += 1
+        window.unbind("<KeyPress>")
+        x = 0
+        for widget in window.winfo_children():
+            widget.destroy()
+    elif e.keysym == "Right":
+        gameState +=1
+        x = 1
+        window.unbind("<KeyPress>")
+    print(gameState)
+    updateWindow()
+
+    
+def gameKey2(e):
+    print(e)
+    global gameState, y
+    y = 0
+    if e.keysym=="Left":
+        gameState += 1
+        window.unbind("<KeyPress>")
+        y = 0
+        for widget in window.winfo_children():
+            widget.destroy()
+    elif e.keysym == "Right":
+        gameState +=1
+        y = 1
+        window.unbind("<KeyPress>")
+    print(gameState)
+    updateWindow()
 
 def game1(e): 
-    global lives1, lives2, myList
+    global myList
     myList = []
     playtime = 3
     while ready_== True and playtime !=0: 
+        print("Game1 while")
         for widget in window.winfo_children():
+        #    if someKeyPressed:
             widget.destroy()
         playtime -=1
-        label3 = tk.Label(window,text=f"{p1} press the arrow key corresponding to your decision \n(either left for negociate of right for betray) ", bg="#FFFFFF")
-        label3.grid(row=0,column=0)
-        decision(e)
-        for widget in window.winfo_children():
-            widget.destroy()
+        updateWindow()
+        #myList.append( decision(e) )
+        #for widget in window.winfo_children():
+        #    widget.destroy()
 
         
-        label4 = tk.Label(window,text=f"{p2} press the arrow key corresponding to your decision \n(either left for negociate of right for betray) ", bg="#FFFFFF")
-        label4.grid(row=0,column=0)
-        decision(e)
-        print("worked")
-        time.sleep(2)
+        #label4 = tk.Label(window,text=f"{p2} press the arrow key corresponding to your decision \n(either left for negociate of right for betray) ", bg="#FFFFFF")
+        #label4.grid(row=0,column=0)
+        #decision(e)
+        #print("worked")
+        #time.sleep(2)
        
 
-        for widget in window.winfo_children():
-            widget.destroy()
+        #for widget in window.winfo_children():
+        #    widget.destroy()
 
-
+        """
         if myList[0] == 0 and myList[1] == 0:
             lives1 += 1
             lives2 += 1
@@ -144,7 +222,7 @@ def game1(e):
         if myList[0] == 1 and myList[1] == 1:  
             lives1 -= 1
             lives2 -= 1
-
+        """
 
 
 
