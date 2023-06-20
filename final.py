@@ -72,13 +72,13 @@ def ready(e):
 def names():
     global player1, player2
     namelabel1 = tk.Label(window,text="What is the name of player 1 ?", bg="#FFFFFF")
-    namelabel1.grid(row=0,column=0)
+    namelabel1.grid(row=1,column=0)
     namelabel2 = tk.Label(window,text="What is the name of player 2 ?", bg="#FFFFFF")
-    namelabel2.grid(row=1,column=0)
+    namelabel2.grid(row=2,column=0)
     player1 = tk.Entry(window, width=40)
-    player1.grid(row=0,column=1)
+    player1.grid(row=1,column=1)
     player2 = tk.Entry(window, width=40)
-    player2.grid(row=1,column=1)
+    player2.grid(row=2,column=1)
 
     b1 = tk.Button(window,text="confirm")
     b1.grid(row=3,columnspan=2)
@@ -141,18 +141,41 @@ def updateWindow():
         if lives1 == 0 or lives2 == 0: 
             gamestop()
         else: 
-            gameon()
+            for widget in window.winfo_children():
+                widget.destroy()
+            game2()
        
+
+
+
 def gamestop(): 
+    #have to update the window
+    for widget in window.winfo_children():
+            widget.destroy()
     if lives1 == 0:
         label3 = tk.Label(window,text=f"{p1} lost all their lives and lost !!! ", bg="#FFFFFF")
         label3.grid(row=0,column=0)
     if lives2 == 0:
         label3 = tk.Label(window,text=f"{p2} lost all their lives and lost !!! ", bg="#FFFFFF")
         label3.grid(row=0,column=0)
-def gameon():
-    print("yipee")
+    reset()
+    names()
+    
+    
+def ready2(e): 
+    global ready_
+    ready_ = True 
+    maths()
 
+def game2(): 
+    label1 = tk.Label(window,text=f"you will now have to answer a math question each, if your answer is right \n you don't lose anything, however, if you get it wrong \n you will lose 1hp", bg="#FFFFFF")
+    label1.grid(row=0,column=0)
+    b1 = tk.Button(window,text="ready ?")
+    b1.grid(row=5,columnspan=2)
+    b1.bind("<Button-1>",ready2)
+    
+def maths(): 
+    print("maths stuff")
 
 def gameKey1(e):
     print(e)
@@ -228,6 +251,16 @@ def game1(e):
             lives2 -= 1
         """
 
+def reset(): 
+    global lives1, lives2, p1, p2, ready_, gameState, x, y
+    lives1 = 3
+    lives2 = 3
+    p1 = None
+    p2 = None
+    ready_ = False 
+    gameState = 0
+    x, y = None, None
+    return lives1, lives2, p1, p2, ready_, gameState, x, y
 
 
 names()
