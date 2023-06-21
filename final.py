@@ -48,7 +48,7 @@ Maybe displaying a tie screen (if time) ?
 password = getpass.getpass()
 print(password)
 mypass = getpass.getpass("PASSWORD : ")
-'''
+''' 
 
 lives1 = 3
 lives2 = 3
@@ -57,17 +57,16 @@ p2 = None
 ready_ = False 
 gameState = 0
 x, y = None, None
+turn1 = 0
 """
 0 - getting names
 1 - first decision
 """
 
-
 def ready(e): 
     global ready_
     ready_ = True 
     game1(e)
-
 
 def names():
     global player1, player2
@@ -83,7 +82,6 @@ def names():
     b1 = tk.Button(window,text="confirm")
     b1.grid(row=3,columnspan=2)
     b1.bind("<Button-1>",play)
-    
     
 def play(e):
     global p1, p2
@@ -145,9 +143,6 @@ def updateWindow():
                 widget.destroy()
             game2()
        
-
-
-
 def gamestop(): 
     #have to update the window
     for widget in window.winfo_children():
@@ -161,10 +156,11 @@ def gamestop():
     reset()
     names()
     
-    
 def ready2(e): 
     global ready_
     ready_ = True 
+    for widget in window.winfo_children():
+                widget.destroy()
     maths()
 
 def game2(): 
@@ -175,7 +171,60 @@ def game2():
     b1.bind("<Button-1>",ready2)
     
 def maths(): 
-    print("maths stuff")
+    global solution, turn1, lives1, lives2
+    a = random.randint(0, 10)
+    b = random.randint(0, 10) 
+    c = random.randint(0, 10)
+
+    label1 = tk.Label(window,text=f"how many solution is there in R for: \n {a}x^2 + {b}x + {c} = 0", bg="#FFFFFF")
+    label1.grid(row=0,column=0)
+    print(a, b ,c)
+    solution = None
+    delta = (a*a) - (4*a*c)
+    if delta > 0:
+        solution = 2 
+    if delta == 0: 
+        solution = 1 
+    if delta < 0: 
+        solution = 0
+    
+    if turn1 == 0:
+        ask1()
+        turn1 = 1 
+        if answer1 == solution: 
+            "print"
+        else: 
+            lives1 -= 1
+        maths()
+    else:
+        ask2()
+        if answer1 == solution: 
+            "print"
+        else: 
+            lives1 -= 1
+    if lives1 == 0 or lives2 == 0: 
+        gamestop()
+    else: 
+        for widget in window.winfo_children():
+            widget.destroy()
+        endscreen()
+        
+def endscreen(): 
+    "you both won !"
+    
+def ask1():
+    global answer1
+    answer1 = tk.Entry(window, width=40)
+    answer1.grid(row=1,column=0)
+
+def ask2(): 
+    global answer2
+    answer2 = tk.Entry(window, width=40)
+    answer2.grid(row=1,column=0)
+
+
+
+
 
 def gameKey1(e):
     print(e)
@@ -194,7 +243,6 @@ def gameKey1(e):
     print(gameState)
     updateWindow()
 
-    
 def gameKey2(e):
     print(e)
     global gameState, y
@@ -262,9 +310,5 @@ def reset():
     x, y = None, None
     return lives1, lives2, p1, p2, ready_, gameState, x, y
 
-
 names()
-
-
-
 window.mainloop()
